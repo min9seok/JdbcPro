@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import com.util.DBConn;
 
-import domain.BoardDTO;
-import persistence.BoardDAOImpl;
+import days04.board.domain.BoardDTO;
+import days04.board.persistence.BoardDAOImpl;
 
 class BoardDAOImplTest {
 
@@ -40,8 +40,8 @@ class BoardDAOImplTest {
 //		}
 		try {
 			BoardDTO dto = BoardDTO.builder()
-					.writer("홍길동").pwd("1234").email("hong@naver.com").title("첫 번째 게시글")
-					.tag(0).content("첫 번째 게시글 내용").build();
+					.writer("김길동").pwd("1234").email("se@naver.com").title("두 번째 게시글")
+					.tag(0).content("두 번째 게시글 내용").build();
 			int rowcount = dao.insert(dto);
 			ArrayList<BoardDTO> list = dao.select();
 			if(rowcount == 1) {

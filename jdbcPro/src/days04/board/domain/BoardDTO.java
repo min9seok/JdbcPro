@@ -1,4 +1,4 @@
-package domain;
+package days04.board.domain;
 
 import java.sql.Date;
 

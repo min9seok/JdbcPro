@@ -1,4 +1,4 @@
-package persistence;
+package days04.board.persistence;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -9,13 +9,15 @@ import java.util.ArrayList;
 
 import com.util.DBConn;
 
-import domain.BoardDTO;
+import days04.board.domain.BoardDTO;
 import domain.SalgradeVO;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 @NoArgsConstructor
 @Setter
+@Getter
 @AllArgsConstructor
 public class BoardDAOImpl implements BoardDAO {
 
@@ -90,5 +92,57 @@ public class BoardDAOImpl implements BoardDAO {
 		rowCount = pstmt.executeUpdate();	         		
 		pstmt.close();			
 		return rowCount;				
+	}
+
+	@Override
+	public void increaseReaded(int seq) throws Exception {	
+		String sql = "UPDATE TBL_CSTVSBOARD "
+				+ "SET readed = readed +1 "
+				+ "WHERE seq = ? ";
+		PreparedStatement pstmt = null;
+		pstmt = this.conn.prepareStatement(sql);
+		pstmt.setInt(1,seq);
+		pstmt.executeUpdate();
+		pstmt.close();
+	}
+
+	@Override
+	public BoardDTO view(int seq) throws Exception {
+		String sql = "SELECT seq,writer,email,title,readed,writedate,content "
+				+ "FROM TBL_CSTVSBOARD "
+				+ "WHERE seq = ? ";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		pstmt = this.conn.prepareStatement(sql);		
+		pstmt.setInt(1,seq);
+		BoardDTO dto = null;
+		rs = pstmt.executeQuery();
+		if(rs.next()) {
+			dto = BoardDTO.builder()
+					.seq(seq)
+					.writer(rs.getString("writer"))
+					.email(rs.getString("email"))
+					.title(rs.getString("title"))
+					.readed(rs.getInt("readed"))
+					.writedate(rs.getDate("writedate"))
+					.content(rs.getString("content")).build();
+		}
+		rs.close();
+		pstmt.close();
+		return dto;
+	}
+
+	@Override
+	public int delete(int seq) throws Exception {
+		int rowCount = 0;
+		String sql = "DELETE FROM TBL_CSTVSBOARD "				
+				+ "WHERE seq = ? ";
+		PreparedStatement pstmt = null;
+		pstmt = this.conn.prepareStatement(sql);
+		pstmt.setInt(1,seq);
+		rowCount = pstmt.executeUpdate();
+		pstmt.close();
+		return rowCount;
+
 	}
 }

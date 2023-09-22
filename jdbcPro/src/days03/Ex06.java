@@ -43,9 +43,9 @@ public class Ex06 {
 				 job = rs.getString("job");;;
 				 mgr = rs.getInt("mgr");;
 				 hiredate = rs.getString("hiredate");;;
-				 sal = rs.getInt("empno");;
-				 comm = rs.getInt("empno");;
-				 deptno = rs.getInt("empno");;
+				 sal = rs.getInt("sal");;
+				 comm = rs.getInt("comm");;
+				 deptno = rs.getInt("deptno");;
 				 vo = new EmpVO(empno, ename, job, mgr, hiredate, sal, comm, deptno);
 				System.out.println(vo);
 			}
@@ -66,3 +66,14 @@ public class Ex06 {
 	}//main
 
 }//class
+
+//create or replace PROCEDURE up_selemp
+//( 
+// pcursor OUT SYS_REFCURSOR
+//)
+//is 
+//begin
+// OPEN pcursor FOR 
+// SELECT *
+// FROM emp;
+//end;
