@@ -65,7 +65,39 @@ public class BoardController {
 		}
 	}
 	private void 검색하기() {
-
+		System.out.println("> 검색조건:제목(1),내용(2),작성자(3),제목+내용(4) 선택좀 ");
+		int searchCondition = this.scanner.nextInt();
+		System.out.print("> 검색어 입력해줭 ");
+		String searchWord = this.scanner.next();
+		// 목록보기()
+		System.out.println("> 현재 페이지 (currentPage) 번호를 입력 해");
+		this.currentPage = scanner.nextInt();
+		ArrayList<BoardDTO> list = this.service.searchService(searchCondition,searchWord);
+		// 뷰 출력담당
+		System.out.println("\t\t\t 게시판");
+		System.out.println("-".repeat(100));
+		System.out.printf("%s\t%-30s  %s\t%-10s\t%s\n","글번호","글제목","글쓴이","작성일","조회수");
+		System.out.println("-".repeat(100));
+		if(list == null) {
+			System.out.println("\t\t> 게시글 좀 작성하고와 ");			
+		}else {
+			Iterator<BoardDTO>  ir = list.iterator();
+			while (ir.hasNext()) {
+				BoardDTO dto = ir.next();
+				System.out.printf("%d\t%-30s  %s\t%-10s\t%d\n"
+						,dto.getSeq()
+						,dto.getTitle()
+						,dto.getWriter()
+						,dto.getWritedate()
+						,dto.getReaded());			
+			}
+		}
+		System.out.println("-".repeat(100));
+		
+		System.out.println("\t\t\t[1] 2 3 4 5 6 7 8 9 10 >");
+		System.out.println("-".repeat(100));
+		일시정지();
+		
 
 	}
 	private void 삭제하기() {
@@ -77,13 +109,39 @@ public class BoardController {
 		}else {
 			System.out.printf("> %d번 삭제를 해봤어용 \n",seq);
 		}
-		
+
 		일시정지();
-		
+
 	}
 	private void 수정하기() {
-		System.out.println("> writer,pwd,email,title,tag,content 입력 ? ");
-
+		System.out.println("> 수정할 게시글 글번호(seq)를 입력 ? ");
+		int seq = this.scanner.nextInt();
+		// 수정 전의 원래 게시글 정보 
+		BoardDTO dto = this.service.viewService(seq);
+		if(dto == null) {
+			System.out.println("> 해당 게시글 이제 없는디 ");
+			return;
+		}
+		System.out.println("\t ㄱ. 글번호 : "+seq);
+		System.out.println("\t ㄴ. 작성자 : "+dto.getWriter());
+		System.out.println("\t ㄷ. 조회수 : "+dto.getReaded());
+		System.out.println("\t ㄹ. 글제목 : "+dto.getTitle());
+		System.out.println("\t ㅁ. 글내용 : "+dto.getContent());
+		System.out.println("\t ㅂ. 작성일 : "+dto.getWritedate());
+		// email,title,content 수정
+		System.out.println("> 이메일 입력 ? ");
+		String email = this.scanner.next();
+		System.out.println("> 제목 입력 ? ");
+		String title = this.scanner.next();
+		System.out.println("> 내용 입력 ? ");
+		String content = this.scanner.next();
+		
+		dto = BoardDTO.builder().seq(seq).email(email).title(title).content(content).build();
+		
+		int rowCount = this.service.updateService(dto);
+		if(rowCount==1)System.out.printf("> %d 게시글 수정용",seq);
+		일시정지();		
+		
 	}
 	private void 상세보기() {
 		System.out.println("> 게시글 글번호(seq)를 입력 ? ");
@@ -107,7 +165,8 @@ public class BoardController {
 	private void 목록보기() {
 		System.out.println("> 현재 페이지 (currentPage) 번호를 입력 해");
 		this.currentPage = scanner.nextInt();
-		ArrayList<BoardDTO> list = this.service.selectService();
+//		ArrayList<BoardDTO> list = this.service.selectService();
+		ArrayList<BoardDTO> list = this.service.selectService(currentPage,numberPerPage);
 		// 뷰 출력담당
 		System.out.println("\t\t\t 게시판");
 		System.out.println("-".repeat(100));
@@ -128,7 +187,12 @@ public class BoardController {
 			}
 		}
 		System.out.println("-".repeat(100));
-		System.out.println("\t\t\t[1] 2 3 4 5 6 7 8 9 10 >");
+//		System.out.println("\t\t\t[1] 2 3 4 5 6 7 8 9 10 >");
+		String pagingBlock = this.service.pageService(
+				this.currentPage,this.numberPerPage,this.numberOfPageBlock
+				//검색조건 검색어
+				);
+		System.out.println(pagingBlock);
 		System.out.println("-".repeat(100));
 		일시정지();
 	}

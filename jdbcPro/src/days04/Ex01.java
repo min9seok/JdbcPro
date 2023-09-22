@@ -39,7 +39,25 @@ public class Ex01 {
 		controller.boardStart();
 //		9. 목록, 새글쓰기, 상세보기
 //		10. 삭제
-//		11. 수정, 페이징처리 , 검색
+//		11. 수정
+//		12. 검색
+//		13. 페이징처리
+//			한페이지 게시글 출력 ? int numberPerPage = 10;
+//			현재 페이지 번호 ? int currentPage = 1;
+//			페이징블럭 수 ? int numberOfPageBlock = 10;
+
+		// board.controller.java 선언
+		// 1) 현재 페이지 번호 필드 currentPage
+		// 2) 페이지 당 출력 게시글 수 필드 numberPerPage
+		// 3) 페이지 블럭 수 필드 numberOfPageBlock
+		// 4) 총 레코드 수 gettotalRecords()
+		// 5) 총 페이지 수 gettotalPages()
+		// 6) 쿼리 확인
+		// 6-2) 페이징 쿼리 where 확인
+		// 7) BoardController 
+//		ArrayList<boardDTO> list =  service.selectService(currentPage,numberPerPage)
+		// 8) serivce.selectService() 
+//		ArrayList<boardDTO> list =  dao.select(currentPage,numberPerPage)
 	}//main
 }//class
 
